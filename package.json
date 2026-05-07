@@ -1,0 +1,21 @@
+{
+  "name": "isoko-admin-portal-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E tests for https://isoko-admin-portal.vercel.app/signin",
+  "scripts": {
+    "test": "playwright test",
+    "test:ci": "playwright test --grep-invert @live",
+    "test:live": "playwright test --grep @live",
+    "codegen": "playwright codegen https://isoko-admin-portal.vercel.app/signin"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0",
+    "dotenv": "^17.4.2",
+    "typescript": "^6.0.3"
+  }
+}
