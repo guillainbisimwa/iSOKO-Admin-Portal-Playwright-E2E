@@ -1,74 +1,13 @@
-import { test, expect, type Page } from '@playwright/test';
-
-/** Default aligns with playwright.config.ts */
-const ADMIN_BASE_URL =
-  process.env.PLAYWRIGHT_BASE_URL ?? 'https://isoko-admin-portal.vercel.app';
-
-/** Authorize endpoint discovered from shipped admin bundle (api.dev.isoko.africa/v1/oauth2/authorize). */
-function oauthOrigin(): string {
-  const raw = process.env.OAUTH_BASE_URL ?? 'https://api.dev.isoko.africa';
-  return new URL(raw).origin;
-}
-
-function regexEscape(origin: string) {
-  return origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function adminCredentials(): { email: string; password: string } | null {
-  const email =
-    process.env.ADMIN_SIGNIN_EMAIL ??
-    process.env.ISOKO_EMAIL ??
-    '';
-  const password =
-    process.env.ADMIN_SIGNIN_PASSWORD ??
-    process.env.ISOKO_PASSWORD ??
-    '';
-  if (!email.trim() || !password) return null;
-  return { email: email.trim(), password: password.trim() };
-}
-
-async function clickContinueWithAdminOAuth(page: Page) {
-  const cta = page
-    .locator('a, button')
-    .filter({ hasText: /Continue with Admin OAuth/i })
-    .first();
-  await expect(cta).toBeVisible({ timeout: 15_000 });
-  await cta.click();
-}
-
-/** Paths on OAUTH_BASE_URL after starting Admin OAuth (authorize may 302 to /v1/oauth2/login). */
-function isHostedOAuthNavigationUrl(url: URL): boolean {
-  if (url.origin !== oauthOrigin()) return false;
-  const p = url.pathname;
-  return (
-    p.startsWith('/v1/oauth2/authorize') ||
-    p.startsWith('/v1/oauth2/login') ||
-    p.startsWith('/oauth2/authorize') ||
-    p === '/login' ||
-    p.startsWith('/login/')
-  );
-}
-
-async function waitForOAuthAuthorize(page: Page) {
-  await page.waitForURL(isHostedOAuthNavigationUrl, {
-    timeout: 25_000,
-    // Hosted OAuth pages often keep network activity or third-party assets open; "load" can stall.
-    waitUntil: 'domcontentloaded',
-  });
-}
-
-/** Selectors refined after inspecting the OAuth HTML (see README: codegen). */
-async function fillOAuthPasswordForm(page: Page, email: string, password: string) {
-  const emailInput = page.getByPlaceholder(/email or phone/i);
-  await expect(emailInput).toBeVisible({ timeout: 15_000 });
-  await emailInput.fill(email);
-
-  const passwordInput = page.locator('input[type="password"]').first();
-  await expect(passwordInput).toBeVisible({ timeout: 10_000 });
-  await passwordInput.fill(password);
-
-  await page.getByRole('button', { name: /sign in|login/i }).click();
-}
+import { test, expect } from '@playwright/test';
+import {
+  ADMIN_BASE_URL,
+  adminCredentials,
+  clickContinueWithAdminOAuth,
+  fillOAuthPasswordForm,
+  oauthOrigin,
+  regexEscape,
+  waitForOAuthAuthorize,
+} from './auth-flow';
 
 test.describe('Admin portal /signin', () => {
   test('renders marketing shell and OAuth CTA', async ({ page }) => {

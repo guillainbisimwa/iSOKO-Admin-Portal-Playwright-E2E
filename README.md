@@ -29,10 +29,18 @@ Never commit `.env`.
   ```bash
   npm run test:ci
   ```
-- **Including live login / negative OAuth tests** (`@live` — requires credentials in `.env`):
+- **Including live login, OAuth negative cases, and instance admin dashboard** (`@live` — requires credentials in `.env`):
   ```bash
   npm run test:live
   ```
+
+### What runs where
+
+| Area | Spec file | Tag |
+|------|-----------|-----|
+| Sign-in shell, OAuth redirect | `[tests/admin-portal-signin.spec.ts](tests/admin-portal-signin.spec.ts)` | CI + `@live` for credential flows |
+| Shared OAuth / login helpers | `[tests/auth-flow.ts](tests/auth-flow.ts)` | imported by specs |
+| Instance admin dashboard (post-login metrics on `/isoko/association`) | `[tests/admin-portal-instance-dashboard.spec.ts](tests/admin-portal-instance-dashboard.spec.ts)` | `@live` only |
 
 UI mode:
 
@@ -48,10 +56,10 @@ The hosted OAuth form may change wording or semantics. Capture stable locators w
 npm run codegen
 ```
 
-Interact with **Continue with Admin OAuth**, complete the authorize step, then copy `getByRole` / `getByPlaceholder` output into `[tests/admin-portal-signin.spec.ts](tests/admin-portal-signin.spec.ts)`.
+Interact with **Continue with Admin OAuth**, complete the authorize step, then copy `getByRole` / `getByPlaceholder` output into `[tests/auth-flow.ts](tests/auth-flow.ts)` (`fillOAuthPasswordForm`).
 
-The bundled admin portal exposes `api.dev.isoko.africa/v1/oauth2/*` endpoints — the OAuth form selectors in `[fillOAuthPasswordForm](tests/admin-portal-signin.spec.ts)` mirror the shared email/phone credential layout used elsewhere; refresh them locally if copy changes upstream.
+The bundled admin portal exposes `api.dev.isoko.africa/v1/oauth2/*` endpoints — those selectors mirror the shared email/phone credential layout used elsewhere; refresh them locally if copy changes upstream.
 
 ## Notes
 
-Authorize path is `**/v1/oauth2/authorize`** on the configured `OAUTH_BASE_URL`; this matches the admin portal frontend bundle shipped at the time these tests were added.
+The browser hits `**/v1/oauth2/authorize`** on `OAUTH_BASE_URL`, then the IdP may redirect to **`/v1/oauth2/login`** before returning to the admin app. After a successful code exchange the SPA routes to **`/isoko/association`** (instance admin dashboard).
