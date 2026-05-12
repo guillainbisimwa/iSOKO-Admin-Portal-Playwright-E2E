@@ -36,21 +36,25 @@ async function clickContinueWithAdminOAuth(page: Page) {
   await cta.click();
 }
 
-async function waitForOAuthAuthorize(page: Page) {
-  await page.waitForURL(
-    url => {
-      try {
-        const u = new URL(url);
-        return (
-          u.origin === oauthOrigin() &&
-          u.pathname.startsWith('/v1/oauth2/authorize')
-        );
-      } catch {
-        return false;
-      }
-    },
-    { timeout: 25_000 },
+/** Paths on OAUTH_BASE_URL after starting Admin OAuth (authorize may 302 to /v1/oauth2/login). */
+function isHostedOAuthNavigationUrl(url: URL): boolean {
+  if (url.origin !== oauthOrigin()) return false;
+  const p = url.pathname;
+  return (
+    p.startsWith('/v1/oauth2/authorize') ||
+    p.startsWith('/v1/oauth2/login') ||
+    p.startsWith('/oauth2/authorize') ||
+    p === '/login' ||
+    p.startsWith('/login/')
   );
+}
+
+async function waitForOAuthAuthorize(page: Page) {
+  await page.waitForURL(isHostedOAuthNavigationUrl, {
+    timeout: 25_000,
+    // Hosted OAuth pages often keep network activity or third-party assets open; "load" can stall.
+    waitUntil: 'domcontentloaded',
+  });
 }
 
 /** Selectors refined after inspecting the OAuth HTML (see README: codegen). */
@@ -63,7 +67,7 @@ async function fillOAuthPasswordForm(page: Page, email: string, password: string
   await expect(passwordInput).toBeVisible({ timeout: 10_000 });
   await passwordInput.fill(password);
 
-  await page.getByRole('button', { name: /sign in/i }).click();
+  await page.getByRole('button', { name: /sign in|login/i }).click();
 }
 
 test.describe('Admin portal /signin', () => {
