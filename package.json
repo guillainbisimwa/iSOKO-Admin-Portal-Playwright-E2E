@@ -7,6 +7,9 @@
     "test": "playwright test",
     "test:ci": "playwright test --grep-invert @live",
     "test:live": "playwright test --grep @live",
+    "report": "playwright show-report",
+    "fill": "node scripts/fill-results.mjs",
+    "run-and-fill": "playwright test; node scripts/fill-results.mjs",
     "codegen": "playwright codegen https://isoko-admin-portal.vercel.app/signin"
   },
   "keywords": [],
@@ -16,6 +19,7 @@
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.6.0",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "typescript": "^6.0.3"
   }
 }
