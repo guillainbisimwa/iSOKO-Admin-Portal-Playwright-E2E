@@ -1,0 +1,374 @@
+{
+  "usersList": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/users",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search by name, email or phone...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Search",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  },
+  "userDetail": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/users/3",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Back to Users"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  },
+  "rolesList": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/roles",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Add Role",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  },
+  "addRole": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/roles",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. Administrator",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Add Role",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Create"
+    ],
+    "dialogHeadings": [],
+    "labels": [
+      "Role Name"
+    ]
+  },
+  "addLevel": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/location-levels",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. County",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. 1",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Add Level",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Create"
+    ],
+    "dialogHeadings": [],
+    "labels": [
+      "Name",
+      "Parent ID (optional)"
+    ]
+  },
+  "addLocation": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/locations",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. Nairobi",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. NBO",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. 2",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. 1",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": null,
+        "name": null,
+        "placeholder": "e.g. 1",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Add Location",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Create"
+    ],
+    "dialogHeadings": [],
+    "labels": [
+      "Name",
+      "Code",
+      "Level ID",
+      "Parent ID (optional)",
+      "Country ID (optional)"
+    ]
+  },
+  "assocList": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      },
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Pending Review2",
+      "Approved13",
+      "Rejected8",
+      "Information Requested2",
+      "View",
+      "View"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  },
+  "assocDetail": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/associations/40",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Back to Associations",
+      "Approve",
+      "Decline",
+      "Request Info"
+    ],
+    "dialogHeadings": [],
+    "labels": [
+      "Association Code",
+      "Country",
+      "Founded",
+      "Total Members",
+      "Email Address",
+      "Phone Number",
+      "Physical Address",
+      "Status",
+      "Created"
+    ]
+  },
+  "ordersList": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/orders",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "All",
+      "Pending",
+      "Confirmed",
+      "Delivered",
+      "Rejected",
+      "Cancelled",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View",
+      "View"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  },
+  "orderDetail": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/orders/38",
+    "inputs": [
+      {
+        "tag": "input",
+        "type": "text",
+        "name": null,
+        "placeholder": "Search...",
+        "disabled": false,
+        "readonly": false
+      }
+    ],
+    "selects": [],
+    "comboboxes": 0,
+    "buttons": [
+      "Sign Out",
+      "Back to Orders",
+      "Update Status",
+      "Edit Qty",
+      "Remove"
+    ],
+    "dialogHeadings": [],
+    "labels": []
+  }
+}
