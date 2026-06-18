@@ -36,17 +36,77 @@ Never commit `.env`.
 
 ### What runs where
 
-| Area | Spec file | Tag |
-|------|-----------|-----|
-| Sign-in shell, OAuth redirect | `[tests/admin-portal-signin.spec.ts](tests/admin-portal-signin.spec.ts)` | CI + `@live` for credential flows |
-| Shared OAuth / login helpers | `[tests/auth-flow.ts](tests/auth-flow.ts)` | imported by specs |
-| Instance admin dashboard (post-login metrics on `/isoko/association`) | `[tests/admin-portal-instance-dashboard.spec.ts](tests/admin-portal-instance-dashboard.spec.ts)` | `@live` only |
+The suite executes the ~120 test cases from the source workbook against the live portal. Each test
+title is prefixed with its workbook TC ID (e.g. `IA-FM01-F01-TC01 ...`) so results map straight back
+to the Excel rows.
+
+| Area | Spec file |
+|------|-----------|
+| Shared OAuth / login helpers | `tests/auth-flow.ts` |
+| One-time login + saved session (`storageState`) | `tests/auth.setup.ts` |
+| Logged-in fixture + shared UI helpers | `tests/portal.ts` |
+| Login (happy path, invalid password, guard) | `tests/login.spec.ts` |
+| Dashboard metrics + nav access | `tests/dashboard-nav.spec.ts` |
+| User management (list/search/view) | `tests/users.spec.ts` |
+| Roles & permissions (reversible writes) | `tests/roles-permissions.spec.ts` |
+| Locations & location levels (reversible writes) | `tests/locations.spec.ts` |
+| User-list export | `tests/export-userlist.spec.ts` |
+| Association management | `tests/associations.spec.ts` |
+| Admin order management | `tests/orders.spec.ts` |
+| Email/SMS templates | `tests/templates.spec.ts` |
+| Blocked cases (registered as skips so they show in the report) | `tests/blocked.spec.ts` |
+| Single source of truth for all TC metadata | `tests/test-catalog.ts` |
 
 UI mode:
 
 ```bash
 npx playwright test --ui
 ```
+
+## Execute all test cases and fill the workbook
+
+1. Run the full suite (generates `reports/results.json` and the HTML report):
+   ```bash
+   npm test
+   ```
+   The browser cache and a shared run stamp are picked up automatically; if Playwright cannot find
+   its browsers, prefix with `PLAYWRIGHT_BROWSERS_PATH="$HOME/Library/Caches/ms-playwright"`.
+2. Merge the results into a filled copy of the workbook:
+   ```bash
+   npm run fill
+   ```
+   This reads `reports/results.json` + `tests/test-catalog.ts` and writes:
+   - `reports/test-cases-filled.xlsx` — a copy of the source sheet with column **G** Tester Result
+     (`Pass` / `Fail` / `Pending Testing`), **I** comment, **O** actual completion date, **P** testing date.
+   - `reports/SUMMARY.md` — per-section Pass / Fail / Pending counts.
+
+   The source workbook defaults to `~/Downloads/test-cases.xlsx`; override with `SRC_XLSX=/path/to.xlsx`.
+3. Or do both in one step:
+   ```bash
+   npm run run-and-fill
+   ```
+
+### Result classification
+
+- **Pass / Fail** — automatically executed read-only or reversible-write checks. A genuinely missing
+  UI element (e.g. no export button, no user filters) is recorded as **Fail** with an explanatory
+  comment, never silently passed.
+- **Pending Testing** — cases that need test data the primary admin cannot safely produce (deactivated
+  admin login, non-admin login, bulk/irreversible/notification actions, 10k-row export, etc.), plus
+  any case skipped at runtime because a precondition was not met.
+
+Reversible-write tests create throwaway `E2E_TEMP_*` entities and **deactivate** them in cleanup
+(the portal has no hard delete), using only the primary admin credentials.
+
+## Viewing reports
+
+- **Graphical (HTML):**
+  ```bash
+  npm run report
+  ```
+  opens `playwright-report/index.html`.
+- **CLI:** the `list` reporter prints results during `npm test`; `reports/SUMMARY.md` holds the
+  per-section tally.
 
 ## Refresh selectors (codegen)
 
