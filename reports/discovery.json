@@ -1,0 +1,940 @@
+{
+  "base": "https://isoko-admin-portal.vercel.app",
+  "loginOk": true,
+  "finalUrl": "https://isoko-admin-portal.vercel.app/isoko/association",
+  "nav": [
+    {
+      "text": "Associations",
+      "href": "/isoko/association"
+    },
+    {
+      "text": "Products",
+      "href": "/isoko/association/products"
+    },
+    {
+      "text": "Orders",
+      "href": "/isoko/association/orders"
+    },
+    {
+      "text": "Users",
+      "href": "/isoko/association/users"
+    },
+    {
+      "text": "Roles",
+      "href": "/isoko/association/roles"
+    },
+    {
+      "text": "Age Groups",
+      "href": "/isoko/association/age-groups"
+    },
+    {
+      "text": "Commodity Categories",
+      "href": "/isoko/association/commodity-categories"
+    },
+    {
+      "text": "Commodity Sub-categories",
+      "href": "/isoko/association/commodity-sub-categories"
+    },
+    {
+      "text": "Commodities",
+      "href": "/isoko/association/commodities"
+    },
+    {
+      "text": "Measurement Metrics",
+      "href": "/isoko/association/measurement-metrics"
+    },
+    {
+      "text": "Measurement Units",
+      "href": "/isoko/association/measurement-units"
+    },
+    {
+      "text": "Payment Methods",
+      "href": "/isoko/association/payment-methods"
+    },
+    {
+      "text": "Languages",
+      "href": "/isoko/association/languages"
+    },
+    {
+      "text": "Locations",
+      "href": "/isoko/association/locations"
+    },
+    {
+      "text": "Location Levels",
+      "href": "/isoko/association/location-levels"
+    },
+    {
+      "text": "Genders",
+      "href": "/isoko/association/genders"
+    },
+    {
+      "text": "Countries",
+      "href": "/isoko/association/countries"
+    }
+  ],
+  "routes": {
+    "__dashboard__": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association",
+      "h1": [
+        "Associations"
+      ],
+      "headings": [
+        "Associations",
+        "25",
+        "9",
+        "2",
+        "Associations Management"
+      ],
+      "tables": 1,
+      "bodyRows": 2,
+      "searchPlaceholders": [
+        "Search...",
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Pending Review2",
+        "Approved13",
+        "Rejected8",
+        "Information Requested2",
+        "View",
+        "View"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Associations": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association",
+      "h1": [
+        "Associations"
+      ],
+      "headings": [
+        "Associations",
+        "25",
+        "9",
+        "2",
+        "Associations Management"
+      ],
+      "tables": 1,
+      "bodyRows": 2,
+      "searchPlaceholders": [
+        "Search...",
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Pending Review2",
+        "Approved13",
+        "Rejected8",
+        "Information Requested2",
+        "View",
+        "View"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Products": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/products",
+      "h1": [
+        "Products"
+      ],
+      "headings": [
+        "Products",
+        "All Products"
+      ],
+      "tables": 1,
+      "bodyRows": 10,
+      "searchPlaceholders": [
+        "Search...",
+        "Search by product name..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Search",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Orders": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/orders",
+      "h1": [
+        "Orders"
+      ],
+      "headings": [
+        "Orders",
+        "All Orders"
+      ],
+      "tables": 1,
+      "bodyRows": 10,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "All",
+        "Pending",
+        "Confirmed",
+        "Delivered",
+        "Rejected",
+        "Cancelled",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Users": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/users",
+      "h1": [
+        "Users"
+      ],
+      "headings": [
+        "Users",
+        "All Users"
+      ],
+      "tables": 1,
+      "bodyRows": 15,
+      "searchPlaceholders": [
+        "Search...",
+        "Search by name, email or phone..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Search",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View",
+        "View"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Roles": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/roles",
+      "h1": [
+        "Roles"
+      ],
+      "headings": [
+        "Roles",
+        "Roles List"
+      ],
+      "tables": 1,
+      "bodyRows": 4,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Role",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Age Groups": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/age-groups",
+      "h1": [
+        "Age Groups"
+      ],
+      "headings": [
+        "Age Groups",
+        "Age Groups List"
+      ],
+      "tables": 1,
+      "bodyRows": 3,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Age Group",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Commodity Categories": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/commodity-categories",
+      "h1": [
+        "Commodity Categories"
+      ],
+      "headings": [
+        "Commodity Categories",
+        "Commodity Categories List"
+      ],
+      "tables": 1,
+      "bodyRows": 9,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Category",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Commodity Sub-categories": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/commodity-sub-categories",
+      "h1": [
+        "Commodity Sub-categories"
+      ],
+      "headings": [
+        "Commodity Sub-categories",
+        "Commodity Sub-categories List"
+      ],
+      "tables": 1,
+      "bodyRows": 9,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Sub-category",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Commodities": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/commodities",
+      "h1": [
+        "Commodities"
+      ],
+      "headings": [
+        "Commodities",
+        "Commodities List"
+      ],
+      "tables": 1,
+      "bodyRows": 7,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Commodity",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Measurement Metrics": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/measurement-metrics",
+      "h1": [
+        "Measurement Metrics"
+      ],
+      "headings": [
+        "Measurement Metrics",
+        "Measurement Metrics List"
+      ],
+      "tables": 1,
+      "bodyRows": 11,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Metric",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Measurement Units": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/measurement-units",
+      "h1": [
+        "Measurement Units"
+      ],
+      "headings": [
+        "Measurement Units",
+        "Measurement Units List"
+      ],
+      "tables": 1,
+      "bodyRows": 8,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Unit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Payment Methods": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/payment-methods",
+      "h1": [
+        "Payment Methods"
+      ],
+      "headings": [
+        "Payment Methods",
+        "Payment Methods List"
+      ],
+      "tables": 1,
+      "bodyRows": 3,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Method",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Languages": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/languages",
+      "h1": [
+        "Languages"
+      ],
+      "headings": [
+        "Languages",
+        "Languages List"
+      ],
+      "tables": 1,
+      "bodyRows": 1,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Language",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Locations": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/locations",
+      "h1": [
+        "Locations"
+      ],
+      "headings": [
+        "Locations",
+        "Locations List"
+      ],
+      "tables": 1,
+      "bodyRows": 4,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Location",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Location Levels": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/location-levels",
+      "h1": [
+        "Location Levels"
+      ],
+      "headings": [
+        "Location Levels",
+        "Location Levels List"
+      ],
+      "tables": 1,
+      "bodyRows": 2,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Level",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Genders": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/genders",
+      "h1": [
+        "Genders"
+      ],
+      "headings": [
+        "Genders",
+        "Genders List"
+      ],
+      "tables": 1,
+      "bodyRows": 2,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Gender",
+        "Edit",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    },
+    "Countries": {
+      "url": "https://isoko-admin-portal.vercel.app/isoko/association/countries",
+      "h1": [
+        "Countries"
+      ],
+      "headings": [
+        "Countries",
+        "Countries List"
+      ],
+      "tables": 1,
+      "bodyRows": 1,
+      "searchPlaceholders": [
+        "Search..."
+      ],
+      "buttons": [
+        "Sign Out",
+        "Add Country",
+        "Edit"
+      ],
+      "links": [
+        "Associations",
+        "Products",
+        "Orders",
+        "Users",
+        "Roles",
+        "Age Groups",
+        "Commodity Categories",
+        "Commodity Sub-categories",
+        "Commodities",
+        "Measurement Metrics",
+        "Measurement Units",
+        "Payment Methods",
+        "Languages",
+        "Locations",
+        "Location Levels",
+        "Genders",
+        "Countries"
+      ],
+      "tabs": [],
+      "comboboxes": 0,
+      "selects": 0
+    }
+  },
+  "error": null
+}
