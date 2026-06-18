@@ -65,13 +65,19 @@ for (const tc of catalog) {
   } else if (r) {
     if (r.status === 'passed') {
       testerResult = 'Pass';
-      comment = 'Automated check passed against live portal.';
+      comment = tc.checks
+        ? `Pass - ${tc.checks}`
+        : 'Pass - automated check passed against the live portal.';
     } else if (r.status === 'skipped') {
       testerResult = 'Pending Testing';
-      comment = `Skipped at runtime: ${r.message || 'precondition not met'}`;
+      const why = r.message || 'precondition not met';
+      comment = tc.checks
+        ? `Pending - ${tc.checks} Skipped at runtime: ${why}`
+        : `Pending - skipped at runtime: ${why}`;
     } else {
       testerResult = 'Fail';
-      comment = r.message ? `Automated check failed: ${r.message}` : 'Automated check failed.';
+      const reason = tc.failReason || (tc.checks ? `${tc.checks} did not behave as expected` : 'automated check failed');
+      comment = r.message ? `Fail - ${reason} (runtime: ${r.message})` : `Fail - ${reason}.`;
     }
   } else {
     testerResult = 'Pending Testing';
