@@ -1,0 +1,152 @@
+{
+  "editRole": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/roles",
+    "inputs": [
+      {
+        "type": "text",
+        "placeholder": "Search...",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. Administrator",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": "checkbox",
+        "placeholder": null,
+        "checked": true,
+        "role": null
+      }
+    ],
+    "checkboxes": 1,
+    "buttons": [
+      "Sign Out",
+      "Add Role",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Update"
+    ],
+    "labels": [
+      "Role Name",
+      "Active"
+    ],
+    "modalText": "Edit Role\nRole Name\nActive\nCancel\nUpdate"
+  },
+  "editLevel": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/location-levels",
+    "inputs": [
+      {
+        "type": "text",
+        "placeholder": "Search...",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. County",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. 1",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": "checkbox",
+        "placeholder": null,
+        "checked": true,
+        "role": null
+      }
+    ],
+    "checkboxes": 1,
+    "buttons": [
+      "Sign Out",
+      "Add Level",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Update"
+    ],
+    "labels": [
+      "Name",
+      "Parent ID (optional)",
+      "Active"
+    ],
+    "modalText": "Edit Location Level\nName\nParent ID (optional)\nActive\nCancel\nUpdate"
+  },
+  "editLocation": {
+    "url": "https://isoko-admin-portal.vercel.app/isoko/association/locations",
+    "inputs": [
+      {
+        "type": "text",
+        "placeholder": "Search...",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. Nairobi",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. NBO",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. 2",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. 1",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": null,
+        "placeholder": "e.g. 1",
+        "checked": false,
+        "role": null
+      },
+      {
+        "type": "checkbox",
+        "placeholder": null,
+        "checked": true,
+        "role": null
+      }
+    ],
+    "checkboxes": 1,
+    "buttons": [
+      "Sign Out",
+      "Add Location",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Edit",
+      "Cancel",
+      "Update"
+    ],
+    "labels": [
+      "Name",
+      "Code",
+      "Level ID",
+      "Parent ID (optional)",
+      "Country ID (optional)",
+      "Active"
+    ],
+    "modalText": "Edit Location\nName\nCode\nLevel ID\nParent ID (optional)\nCountry ID (optional)\nActive\nCancel\nUpdate"
+  }
+}
