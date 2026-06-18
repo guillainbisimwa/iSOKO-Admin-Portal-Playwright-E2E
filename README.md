@@ -123,3 +123,8 @@ The bundled admin portal exposes `api.dev.isoko.africa/v1/oauth2/*` endpoints â€
 ## Notes
 
 The browser hits `**/v1/oauth2/authorize`** on `OAUTH_BASE_URL`, then the IdP may redirect to **`/v1/oauth2/login`** before returning to the admin app. After a successful code exchange the SPA routes to **`/isoko/association`** (instance admin dashboard).
+
+npm test            # run the whole suite (writes results.json + HTML report)
+npm run fill        # produce reports/test-cases-filled.xlsx + SUMMARY.md
+npm run run-and-fill # both in one step
+npm run report      # open the graphical HTML report
