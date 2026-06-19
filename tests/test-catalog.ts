@@ -13,20 +13,32 @@
  *   the `note` here.
  */
 
-export type ExecMode = 'readonly' | 'write' | 'blocked';
+export type ExecMode =
+  | 'readonly' // executed live, read-only
+  | 'write' // executed live, reversible mutation
+  | 'blocked' // not executed (irreversible / needs extra data / second session) -> Pending Testing
+  | 'pending' // not yet automated this run (e.g. new section) -> Pending Testing
+  | 'gap'; // confirmed missing feature (e.g. no Delete) -> recorded as Fail with failReason
 
 export interface TestCase {
   id: string;
-  row: number;
+  /** Legacy source-row hint; the fill script now matches by trimmed id, so this is optional/ignored. */
+  row?: number;
   section: string;
   title: string;
-  expected: string;
+  expected?: string;
   mode: ExecMode;
   note?: string;
   /** Plain-language description of what the automated test verifies (used to explain a Pass). */
   checks?: string;
   /** The real reason an automated case fails (a known application gap), used to explain a Fail. */
   failReason?: string;
+  /** For inserted rows (delete-feature tests): the existing case id after which to insert this row. */
+  insertAfter?: string;
+  /** For inserted rows: pre-condition text to write into the sheet. */
+  preCondition?: string;
+  /** For inserted rows: test-steps text to write into the sheet. */
+  steps?: string;
 }
 
 const BLOCK_NO_DEACTIVATED_ADMIN =
@@ -45,6 +57,12 @@ const BLOCK_ORDER =
   'Blocked - order state transitions / buyer-seller actions mutate live orders and notify real users (excluded by semi-destructive scope).';
 const BLOCK_SEED =
   'Blocked - needs a specific pre-seeded data condition (e.g. 10,000+ rows) not present in the live environment.';
+const BLOCK_LISTING =
+  'Blocked - mutates live product listings and/or sends real notifications (approve / publish / feature / auto-*); excluded by semi-destructive scope.';
+const BLOCK_CROSS =
+  'Blocked - cross-feature dependency (requires seller products, service listings, or a second actor) not set up on the live environment.';
+const PENDING_NEW =
+  'Pending - new section not automated in this run; the portal sidebar was regrouped into collapsible menus so a nav-aware spec is required. Recommended for manual verification.';
 
 export const TEST_CASES: TestCase[] = [
   // ---- LOG IN ----
@@ -185,6 +203,97 @@ export const TEST_CASES: TestCase[] = [
   { id: 'IA-FM01-F22-TC14', row: 129, section: 'EMAIL AND SMS TEMPLATE CONFIGURATION', title: 'Prevent Empty SMS', expected: 'Save blocked', mode: 'blocked', note: BLOCK_TEMPLATE },
   { id: 'IA-FM01-F22-TC15', row: 130, section: 'EMAIL AND SMS TEMPLATE CONFIGURATION', title: 'Multiple Variables in Template', expected: 'All accepted', mode: 'blocked', note: BLOCK_TEMPLATE },
   { id: 'IA-FM01-F22-TC16', row: 131, section: 'EMAIL AND SMS TEMPLATE CONFIGURATION', title: 'Variable Preview Resolution', expected: 'Variables resolved', mode: 'blocked', note: BLOCK_TEMPLATE },
+
+  // ---- PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY (new section) ----
+  { id: 'IA-CM02-F11-TC01', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create New Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC02', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Category with Missing Mandatory Fields', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC03', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Duplicate Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC04', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Edit Existing Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC05', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Deactivate Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC06', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Verify Deactivated Category Visibility', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC07', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Reactivate Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC08', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Subcategory under Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC09', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Subcategory under Inactive Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC10', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Edit Subcategory', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC11', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Deactivate Subcategory', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC12', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Verify Product Visibility after Subcategory Deactivation', mode: 'blocked', note: BLOCK_CROSS },
+  { id: 'IA-CM02-F11-TC13', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Reactivate Subcategory', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC14', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Commodity under Subcategory', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC15', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Create Commodity under Inactive Subcategory', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC16', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Edit Commodity Details', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC17', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Deactivate Commodity', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC18', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Verify Product Creation Restriction', mode: 'blocked', note: BLOCK_CROSS },
+  { id: 'IA-CM02-F11-TC19', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Reactivate Commodity', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F11-TC20', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Validate Hierarchical Filtering', mode: 'pending', note: PENDING_NEW },
+
+  // ---- SERVICE CATEGORY AND TYPE (new section) ----
+  { id: 'IA-CM02-F12-TC01', section: 'SERVICE CATEGORY AND TYPE', title: 'Create Service Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC02', section: 'SERVICE CATEGORY AND TYPE', title: 'Create Service Category with Missing Fields', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC03', section: 'SERVICE CATEGORY AND TYPE', title: 'Edit Service Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC04', section: 'SERVICE CATEGORY AND TYPE', title: 'Deactivate Service Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC05', section: 'SERVICE CATEGORY AND TYPE', title: 'Prevent Listing under Inactive Category', mode: 'blocked', note: BLOCK_CROSS },
+  { id: 'IA-CM02-F12-TC06', section: 'SERVICE CATEGORY AND TYPE', title: 'Reactivate Service Category', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC07', section: 'SERVICE CATEGORY AND TYPE', title: 'Create Service Type (Sub-category)', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC08', section: 'SERVICE CATEGORY AND TYPE', title: 'Edit Service Type', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC09', section: 'SERVICE CATEGORY AND TYPE', title: 'Deactivate Service Type', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC10', section: 'SERVICE CATEGORY AND TYPE', title: 'Reactivate Service Type', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F12-TC11', section: 'SERVICE CATEGORY AND TYPE', title: 'List a service under deactivate service type', mode: 'blocked', note: BLOCK_CROSS },
+
+  // ---- MEASUREMENT UNIT AND METRICS (new section) ----
+  { id: 'IA-CM02-F13-TC01', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create Measurement Metric', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC02', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create Metric with Missing Mandatory Fields', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC03', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create Duplicate Metric', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC04', section: 'MEASUREMENT UNIT AND METRICS', title: 'Edit Measurement Metric', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC05', section: 'MEASUREMENT UNIT AND METRICS', title: 'Deactivate Measurement Metric', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC06', section: 'MEASUREMENT UNIT AND METRICS', title: 'Verify Inactive Metric Not Selectable', mode: 'blocked', note: BLOCK_CROSS },
+  { id: 'IA-CM02-F13-TC07', section: 'MEASUREMENT UNIT AND METRICS', title: 'Reactivate Measurement Metric', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC08', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create Measurement Unit', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC09', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create UNit with Missing Mandatory Fields', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC10', section: 'MEASUREMENT UNIT AND METRICS', title: 'Create Duplicate Unit', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC11', section: 'MEASUREMENT UNIT AND METRICS', title: 'Edit Measurement Unit', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC12', section: 'MEASUREMENT UNIT AND METRICS', title: 'Deactivate Measurement Unit', mode: 'pending', note: PENDING_NEW },
+  { id: 'IA-CM02-F13-TC13', section: 'MEASUREMENT UNIT AND METRICS', title: 'Verify Inactive Unit Not Selectable', mode: 'blocked', note: BLOCK_CROSS },
+  { id: 'IA-CM02-F13-TC14', section: 'MEASUREMENT UNIT AND METRICS', title: 'Reactivate Measurement Metric', mode: 'pending', note: PENDING_NEW },
+
+  // ---- ADMIN PRODUCT LISTING (new section - all mutate live listings / notify) ----
+  { id: 'IA-CM02-F09-TC01', section: 'ADMIN PRODUCT LISTING', title: 'Approve Product Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC02', section: 'ADMIN PRODUCT LISTING', title: 'Reject (Deapprove) Product Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC03', section: 'ADMIN PRODUCT LISTING', title: 'Re-submit Rejected Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC04', section: 'ADMIN PRODUCT LISTING', title: 'Bulk Approval of Listings', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC05', section: 'ADMIN PRODUCT LISTING', title: 'Publish Approved Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC06', section: 'ADMIN PRODUCT LISTING', title: 'Unpublish Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC07', section: 'ADMIN PRODUCT LISTING', title: 'Republish Unpublished Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC08', section: 'ADMIN PRODUCT LISTING', title: 'Auto-Unpublish on Category, sub-category and commodity Deactivation', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC09', section: 'ADMIN PRODUCT LISTING', title: 'Deactivate Active Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC10', section: 'ADMIN PRODUCT LISTING', title: 'Reactivate Deactivated Listing', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC11', section: 'ADMIN PRODUCT LISTING', title: 'Auto-Deactivate Listings on Seller Suspension', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC12', section: 'ADMIN PRODUCT LISTING', title: 'Auto-Deactivate on Association Suspension', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC13', section: 'ADMIN PRODUCT LISTING', title: 'Set Listing as Featured', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC14', section: 'ADMIN PRODUCT LISTING', title: 'Verify Featured Visibility', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC15', section: 'ADMIN PRODUCT LISTING', title: 'Remove Featured Status', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC16', section: 'ADMIN PRODUCT LISTING', title: 'Auto-Remove Featured on Unpublish', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC17', section: 'ADMIN PRODUCT LISTING', title: 'Enforce Featured Limit', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC18', section: 'ADMIN PRODUCT LISTING', title: 'Approval Notification', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC19', section: 'ADMIN PRODUCT LISTING', title: 'Rejection Notification', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC20', section: 'ADMIN PRODUCT LISTING', title: 'Activate notification', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC21', section: 'ADMIN PRODUCT LISTING', title: 'Deactivate notification', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC22', section: 'ADMIN PRODUCT LISTING', title: 'Publish Notification', mode: 'blocked', note: BLOCK_LISTING },
+  { id: 'IA-CM02-F09-TC23', section: 'ADMIN PRODUCT LISTING', title: 'Featured Notification', mode: 'blocked', note: BLOCK_LISTING },
+
+  // ---- DELETE-FEATURE COVERAGE (inserted per section; portal exposes no hard delete) ----
+  { id: 'IA-FM01-F03-TCDEL', section: 'ROLE AND PERMISSION ASSIGNMENT', title: 'Delete Role', mode: 'gap', insertAfter: 'IA-FM01-F03-TC19', preCondition: 'A role exists in the system.', steps: '1. Open IAM -> Roles.\n2. Locate an existing role.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The role is permanently removed from the system and no longer appears in the roles list.', failReason: "No Delete action exists for roles - the role editor offers only Deactivate/Activate. A hard delete is required by this test but is missing." },
+  { id: 'IA-FM01-F15-TCDEL', section: 'USER MANAGEMENT', title: 'Delete User', mode: 'gap', insertAfter: 'IA-FM01-F15-TC13', preCondition: 'A user exists in the system.', steps: '1. Open Users.\n2. Locate an existing user.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The user record is permanently removed from the system.', failReason: "No Delete action exists for users - the portal offers only Activate/Deactivate. A hard delete is required by this test but is missing." },
+  { id: 'IA-FM01-F10-TCDEL1', section: 'LOCATION AND LOCATION LEVEL', title: 'Delete Location Level', mode: 'gap', insertAfter: 'IA-FM01-F10-TC08', preCondition: 'A location level exists.', steps: '1. Open Location Levels.\n2. Locate an existing level.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The location level is permanently removed from the system.', failReason: "No Delete action exists for location levels - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-FM01-F10-TCDEL2', section: 'LOCATION AND LOCATION LEVEL', title: 'Delete Location', mode: 'gap', insertAfter: 'IA-FM01-F10-TC17', preCondition: 'A location exists.', steps: '1. Open Locations.\n2. Locate an existing location.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The location is permanently removed from the system.', failReason: "No Delete action exists for locations - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM05-F01-TCDEL', section: 'ASSOCIATION MANAGEMENT', title: 'Delete Association', mode: 'gap', insertAfter: 'IA-CM05-F01-TC16', preCondition: 'An association exists.', steps: '1. Open Associations.\n2. Locate an existing association.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The association is permanently removed from the system.', failReason: "No Delete action exists for associations - admins can only Approve/Suspend/Reinstate. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F11-TCDEL1', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Delete Category', mode: 'gap', insertAfter: 'IA-CM02-F11-TC07', preCondition: 'A product category exists.', steps: '1. Open Product Categories.\n2. Locate an existing category.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The category is permanently removed from the system.', failReason: "No Delete action exists for product categories - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F11-TCDEL2', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Delete Subcategory', mode: 'gap', insertAfter: 'IA-CM02-F11-TC13', preCondition: 'A subcategory exists.', steps: '1. Open Subcategories.\n2. Locate an existing subcategory.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The subcategory is permanently removed from the system.', failReason: "No Delete action exists for subcategories - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F11-TCDEL3', section: 'PRODUCT CATEGORY, SUB-CATEGORY AND COMMODITY', title: 'Delete Commodity', mode: 'gap', insertAfter: 'IA-CM02-F11-TC20', preCondition: 'A commodity exists.', steps: '1. Open Commodities.\n2. Locate an existing commodity.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The commodity is permanently removed from the system.', failReason: "No Delete action exists for commodities - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F12-TCDEL1', section: 'SERVICE CATEGORY AND TYPE', title: 'Delete Service Category', mode: 'gap', insertAfter: 'IA-CM02-F12-TC06', preCondition: 'A service category exists.', steps: '1. Open Service Categories.\n2. Locate an existing service category.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The service category is permanently removed from the system.', failReason: "No Delete action exists for service categories - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F12-TCDEL2', section: 'SERVICE CATEGORY AND TYPE', title: 'Delete Service Type', mode: 'gap', insertAfter: 'IA-CM02-F12-TC11', preCondition: 'A service type exists.', steps: '1. Open Service Types.\n2. Locate an existing service type.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The service type is permanently removed from the system.', failReason: "No Delete action exists for service types - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F13-TCDEL1', section: 'MEASUREMENT UNIT AND METRICS', title: 'Delete Measurement Metric', mode: 'gap', insertAfter: 'IA-CM02-F13-TC07', preCondition: 'A measurement metric exists.', steps: '1. Open Measurement Metrics.\n2. Locate an existing metric.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The measurement metric is permanently removed from the system.', failReason: "No Delete action exists for measurement metrics - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F13-TCDEL2', section: 'MEASUREMENT UNIT AND METRICS', title: 'Delete Measurement Unit', mode: 'gap', insertAfter: 'IA-CM02-F13-TC14', preCondition: 'A measurement unit exists.', steps: '1. Open Measurement Units.\n2. Locate an existing unit.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The measurement unit is permanently removed from the system.', failReason: "No Delete action exists for measurement units - only Deactivate/Activate is available. A hard delete is required by this test but is missing." },
+  { id: 'IA-CM02-F09-TCDEL', section: 'ADMIN PRODUCT LISTING', title: 'Delete Product Listing', mode: 'gap', insertAfter: 'IA-CM02-F09-TC23', preCondition: 'A product listing exists.', steps: '1. Open Product Listings.\n2. Locate an existing listing.\n3. Click the Delete action.\n4. Confirm deletion.', expected: 'The product listing is permanently removed from the system.', failReason: "No Delete action exists for product listings - admins can only Approve/Publish/Deactivate. A hard delete is required by this test but is missing." },
 ];
 
 /** Section header rows in the source workbook (kept as-is, never filled). */
