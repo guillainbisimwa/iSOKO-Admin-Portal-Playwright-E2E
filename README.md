@@ -36,9 +36,11 @@ Never commit `.env`.
 
 ### What runs where
 
-The suite executes the ~120 test cases from the source workbook against the live portal. Each test
-title is prefixed with its workbook TC ID (e.g. `IA-FM01-F01-TC01 ...`) so results map straight back
-to the Excel rows.
+The catalog covers **202** cases: **189** read from the source workbook (across 13 sections) plus
+**13** delete-feature checks that are inserted per section (see "Delete-feature coverage" below).
+Live automated specs run the read-only / reversible-write cases; each test title is prefixed with its
+workbook TC ID (e.g. `IA-FM01-F01-TC01 ...`) so results map straight back to the Excel rows. Test Case
+IDs are trimmed of the leading whitespace present in the source sheet.
 
 | Area | Spec file |
 |------|-----------|
@@ -93,7 +95,19 @@ npx playwright test --ui
   comment, never silently passed.
 - **Pending Testing** — cases that need test data the primary admin cannot safely produce (deactivated
   admin login, non-admin login, bulk/irreversible/notification actions, 10k-row export, etc.), plus
-  any case skipped at runtime because a precondition was not met.
+  any case skipped at runtime because a precondition was not met. The four sections added in this
+  revision (Product Category/Sub-category/Commodity, Service Category & Type, Measurement Unit &
+  Metrics, Admin Product Listing) are recorded here for manual verification — the listing section is
+  blocked because every action mutates live listings or fires notifications.
+
+### Delete-feature coverage
+
+The portal exposes no hard **Delete** anywhere (only Activate/Deactivate, or Approve/Suspend for
+associations). To make this explicit, a `Delete <entity>` case is appended inside each section that
+supports add/update/view (roles, users, location levels, locations, associations, categories,
+sub-categories, commodities, service categories, service types, metrics, units, product listings).
+These carry `mode: 'gap'` in the catalog and are written into the filled sheet as **Fail** with a
+comment explaining the missing delete action.
 
 Reversible-write tests create throwaway `E2E_TEMP_*` entities and **deactivate** them in cleanup
 (the portal has no hard delete), using only the primary admin credentials.
