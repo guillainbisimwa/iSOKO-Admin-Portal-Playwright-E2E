@@ -9,6 +9,8 @@
     "test:live": "playwright test --grep @live",
     "report": "playwright show-report",
     "fill": "node scripts/fill-results.mjs",
+    "suite": "node scripts/run-suite.mjs",
+    "suite-and-fill": "node scripts/run-suite.mjs && node scripts/fill-results.mjs",
     "run-and-fill": "playwright test; node scripts/fill-results.mjs",
     "codegen": "playwright codegen https://isoko-admin-portal.vercel.app/signin"
   },
