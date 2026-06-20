@@ -67,17 +67,22 @@ npx playwright test --ui
 
 ## Execute all test cases and fill the workbook
 
-1. Run the full suite (generates `reports/results.json` and the HTML report):
+1. Run the suite. For live runs prefer the **per-spec runner**, which executes each spec as its own
+   Playwright invocation so every spec re-runs the `setup` login first:
    ```bash
-   npm test
+   npm run suite        # writes one JSON per spec into reports/partial/
    ```
+   This avoids the OAuth session expiring mid-run: the portal's access token only lives a few minutes,
+   so a single end-to-end `npm test` (~12 min) drops the session partway and later specs fail at the
+   login/navigation step. `npm test` still works for the non-live (`@live`-excluded) subset.
    The browser cache and a shared run stamp are picked up automatically; if Playwright cannot find
    its browsers, prefix with `PLAYWRIGHT_BROWSERS_PATH="$HOME/Library/Caches/ms-playwright"`.
 2. Merge the results into a filled copy of the workbook:
    ```bash
    npm run fill
    ```
-   This reads `reports/results.json` + `tests/test-catalog.ts` and writes:
+   This reads the per-spec reports in `reports/partial/` (falling back to a single
+   `reports/results.json`) + `tests/test-catalog.ts` and writes:
    - `reports/test-cases-filled.xlsx` — a copy of the source sheet with column **G** Tester Result
      (`Pass` / `Fail` / `Pending Testing`), **I** comment, **O** actual completion date, **P** testing date.
    - `reports/SUMMARY.md` — per-section Pass / Fail / Pending counts.
@@ -85,8 +90,26 @@ npx playwright test --ui
    The source workbook defaults to `~/Downloads/test-cases.xlsx`; override with `SRC_XLSX=/path/to.xlsx`.
 3. Or do both in one step:
    ```bash
-   npm run run-and-fill
+   npm run suite-and-fill   # per-spec live run, then fill (recommended)
+   # or
+   npm run run-and-fill     # single-invocation run, then fill
    ```
+
+### Known portal findings (surfaced by the live run)
+
+- **Sidebar redesign:** the navigation was regrouped into collapsible menus ("Users & Roles",
+  "Locations", "Commodities", "Market Service Setup", "Measurements", "Listings"). `gotoSection`
+  (`tests/portal.ts`) now navigates by stable route (e.g. `/isoko/association/users`) instead of
+  clicking a flat link.
+- **List views are capped at 10 with no pagination or search.** Roles, Location Levels and Locations
+  all render "Showing 1-10 of N" (e.g. 26 roles, 24 levels, 17 locations) but expose no next/prev
+  controls and no search box, so records beyond the first 10 cannot be reached. A newly created
+  record sorts to the end of the list and therefore cannot be viewed, edited, or deactivated through
+  the UI. The create/edit/deactivate cases for these sections fail for this reason (recorded with an
+  explanatory comment), not because creation itself errors.
+- **Add/Edit modals now use `<select>` dropdowns** for Location Level "Parent" and Location
+  "Level/Parent/Country" (previously free-text ID fields); the location specs select options
+  accordingly.
 
 ### Result classification
 
