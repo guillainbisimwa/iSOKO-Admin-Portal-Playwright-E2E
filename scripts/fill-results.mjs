@@ -32,9 +32,23 @@ const COL = {
 const catalog = await loadCatalog();
 
 // ---- parse Playwright JSON results -> id -> { status, message } ----
+// Prefer per-spec partial reports (reports/partial/*.json) produced by run-suite.mjs; fall back to
+// the single combined reports/results.json.
+const PARTIAL_DIR = path.join(root, 'reports', 'partial');
+const resultFiles = [];
+if (fs.existsSync(PARTIAL_DIR)) {
+  for (const f of fs.readdirSync(PARTIAL_DIR)) if (f.endsWith('.json')) resultFiles.push(path.join(PARTIAL_DIR, f));
+}
+if (!resultFiles.length && fs.existsSync(RESULTS)) resultFiles.push(RESULTS);
+
 const byId = new Map();
-if (fs.existsSync(RESULTS)) {
-  const data = JSON.parse(fs.readFileSync(RESULTS, 'utf8'));
+for (const file of resultFiles) {
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    continue;
+  }
   for (const spec of collectSpecs(data.suites ?? [])) {
     const id = (spec.title || '').trim().split(/\s+/)[0];
     if (!id) continue;
@@ -251,7 +265,7 @@ async function loadCatalog() {
   }
   const arrLiteral = src.slice(arrStart, end + 1);
   // The literal references const note strings (BLOCK_* / PENDING_*); inline their definitions.
-  const constDefs = [...src.matchAll(/const ((?:BLOCK|PENDING)_[A-Z_0-9]+)\s*=\s*\n?\s*'([^']*)';/g)]
+  const constDefs = [...src.matchAll(/const ((?:BLOCK|PENDING|GAP)_[A-Z_0-9]+)\s*=\s*\n?\s*'([^']*)';/g)]
     .map(m => `const ${m[1]} = ${JSON.stringify(m[2])};`)
     .join('\n');
   // eslint-disable-next-line no-new-func
