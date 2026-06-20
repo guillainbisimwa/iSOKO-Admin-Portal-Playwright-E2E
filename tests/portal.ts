@@ -88,12 +88,55 @@ export async function submitModal(page: Page, buttonRx: RegExp): Promise<void> {
   await page.waitForTimeout(600);
 }
 
+/**
+ * Stable routes for the redesigned sidebar. Several sections now live inside collapsible groups
+ * ("Users & Roles", "Locations", "Commodities", ...), so the old "click the visible link" approach
+ * no longer works when a group is collapsed. Navigating straight to the route is robust regardless
+ * of the menu's expand/collapse state.
+ */
+const SECTION_ROUTES: Record<string, string> = {
+  Associations: '/isoko/association',
+  Orders: '/isoko/association/orders',
+  Users: '/isoko/association/users',
+  Roles: '/isoko/association/roles',
+  Locations: '/isoko/association/locations',
+  'Location Levels': '/isoko/association/location-levels',
+  Templates: '/isoko/association/templates',
+  Products: '/isoko/association/products',
+  'Market Services': '/isoko/association/market-services',
+  'Commodity Categories': '/isoko/association/commodity-categories',
+  'Commodity Sub-categories': '/isoko/association/commodity-sub-categories',
+  Commodities: '/isoko/association/commodities',
+  'Market Service Categories': '/isoko/association/market-service-categories',
+  'Market Service Types': '/isoko/association/market-service-types',
+  'Measurement Metrics': '/isoko/association/measurement-metrics',
+  'Measurement Units': '/isoko/association/measurement-units',
+};
+
 /** Navigate to a sidebar section by its visible label and wait for the page heading. */
 export async function gotoSection(page: Page, label: string, headingRx?: RegExp): Promise<void> {
   await closeModal(page);
-  const link = page.locator('nav a, aside a').filter({ hasText: rx(label) }).first();
-  await expect(link).toBeVisible({ timeout: 20_000 });
-  await link.click();
+
+  const route = SECTION_ROUTES[label];
+  if (route) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' }).catch(() => {});
+    await page.waitForTimeout(700);
+  } else {
+    // Fallback: expand collapsible groups until the target link surfaces, then click it.
+    let link = page.locator('nav a, aside a').filter({ hasText: rx(label) }).first();
+    if (!(await link.isVisible().catch(() => false))) {
+      const groups = page.locator('nav button, aside button');
+      const count = await groups.count().catch(() => 0);
+      for (let i = 0; i < count; i++) {
+        await groups.nth(i).click().catch(() => {});
+        await page.waitForTimeout(250);
+        if (await link.isVisible().catch(() => false)) break;
+      }
+    }
+    await expect(link).toBeVisible({ timeout: 20_000 });
+    await link.click();
+  }
+
   await expect(page.getByRole('heading', { level: 1, name: headingRx ?? rx(label) })).toBeVisible({
     timeout: 25_000,
   });
