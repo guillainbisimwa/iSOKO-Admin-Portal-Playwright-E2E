@@ -18,12 +18,24 @@ const created: Array<{ section: string; name: string }> = [];
 // Not serial: with fullyParallel=false these run sequentially in declaration order within one
 // worker, but a single failing assertion does not abort the remaining cases.
 
-async function ensureLevel(page: any, name: string, parentId?: string) {
+/** Select the first real option (skipping any empty placeholder) of the nth <select> in the modal. */
+async function pickSelectOption(page: any, index: number): Promise<boolean> {
+  const sel = page.locator('div.fixed.inset-0 select').nth(index);
+  if (!(await sel.count().catch(() => 0))) return false;
+  const values: string[] = await sel
+    .locator('option')
+    .evaluateAll((opts: any[]) => opts.map(o => o.value).filter((v: string) => v !== ''));
+  if (!values.length) return false;
+  await sel.selectOption(values[0]).catch(() => {});
+  return true;
+}
+
+async function ensureLevel(page: any, name: string, withParent = false) {
   await gotoSection(page, 'Location Levels', /Location Levels/i);
   if (await page.locator('tr', { hasText: name }).first().count()) return;
   await openAddModal(page, /Add Level/i);
   await page.getByPlaceholder('e.g. County').fill(name);
-  if (parentId) await page.getByPlaceholder('e.g. 1').first().fill(parentId);
+  if (withParent) await pickSelectOption(page, 0); // Parent is now a <select>
   await submitModal(page, /^Create$/);
 }
 
@@ -33,7 +45,7 @@ async function ensureLocation(page: any, name: string) {
   await openAddModal(page, /Add Location/i);
   await page.getByPlaceholder('e.g. Nairobi').fill(name);
   await page.getByPlaceholder('e.g. NBO').fill(`E${String(STAMP).slice(-5)}`);
-  await page.getByPlaceholder('e.g. 2').fill('1');
+  await pickSelectOption(page, 0); // Level * (required) is now a <select>
   await submitModal(page, /^Create$/);
 }
 
@@ -78,7 +90,7 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
     await gotoSection(page, 'Location Levels', /Location Levels/i);
     await openAddModal(page, /Add Level/i);
     await page.getByPlaceholder('e.g. County').fill(CHILD_LEVEL_NAME);
-    await page.getByPlaceholder('e.g. 1').first().fill('1'); // Parent ID (optional)
+    await pickSelectOption(page, 0); // Parent is now a <select> (optional)
     await submitModal(page, /^Create$/);
     created.push({ section: 'Location Levels', name: CHILD_LEVEL_NAME });
     await expect(page.locator('table').getByText(CHILD_LEVEL_NAME, { exact: false })).toBeVisible({ timeout: 10_000 });
@@ -146,7 +158,7 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
 
   test('IA-FM01-F10-TC08 Visibility of Inactive Levels', async ({ page }) => {
     // Deactivate the child level, then confirm whether the list hides inactive entries.
-    await ensureLevel(page, CHILD_LEVEL_NAME, '1');
+    await ensureLevel(page, CHILD_LEVEL_NAME, true);
     if (!created.find(c => c.name === CHILD_LEVEL_NAME)) created.push({ section: 'Location Levels', name: CHILD_LEVEL_NAME });
     const row = page.locator('tr', { hasText: CHILD_LEVEL_NAME }).first();
     test.skip(!(await row.count()), 'Child level from TC02 not available');
@@ -164,7 +176,7 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
     await openAddModal(page, /Add Location/i);
     await page.getByPlaceholder('e.g. Nairobi').fill(LOC_NAME);
     await page.getByPlaceholder('e.g. NBO').fill(`E${STAMP % 100000}`);
-    await page.getByPlaceholder('e.g. 2').fill('1'); // Level ID
+    await pickSelectOption(page, 0); // Level * (required) is now a <select>
     await submitModal(page, /^Create$/);
     created.push({ section: 'Locations', name: LOC_NAME });
     await expect(page.locator('table').getByText(LOC_NAME, { exact: false })).toBeVisible({ timeout: 10_000 });
@@ -175,8 +187,8 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
     await openAddModal(page, /Add Location/i);
     await page.getByPlaceholder('e.g. Nairobi').fill(CHILD_LOC_NAME);
     await page.getByPlaceholder('e.g. NBO').fill(`C${STAMP % 100000}`);
-    await page.getByPlaceholder('e.g. 2').fill('1'); // Level ID
-    await page.getByPlaceholder('e.g. 1').first().fill('1'); // Parent ID (optional)
+    await pickSelectOption(page, 0); // Level * (required)
+    await pickSelectOption(page, 1); // Parent (optional)
     await submitModal(page, /^Create$/);
     created.push({ section: 'Locations', name: CHILD_LOC_NAME });
     await expect(page.locator('table').getByText(CHILD_LOC_NAME, { exact: false })).toBeVisible({ timeout: 10_000 });
@@ -215,7 +227,7 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
     await openAddModal(page, /Add Location/i);
     await page.getByPlaceholder('e.g. Nairobi').fill(existing);
     await page.getByPlaceholder('e.g. NBO').fill(`D${STAMP % 100000}`);
-    await page.getByPlaceholder('e.g. 2').fill('1');
+    await pickSelectOption(page, 0); // Level * (required)
     await page.getByRole('button', { name: /^Create$/ }).click();
     await page.waitForTimeout(1500);
     const modalOpen = await page.locator('div.fixed.inset-0').count();
@@ -231,15 +243,22 @@ test.describe('LOCATION AND LOCATION LEVEL @live', { tag: '@live' }, () => {
     const row = page.locator('tr', { hasText: LOC_NAME }).first();
     await expect(row).toBeVisible({ timeout: 10_000 });
     await row.getByRole('button', { name: /^Edit$/ }).click();
-    const parent = page.locator('div.fixed.inset-0').getByPlaceholder('e.g. 1').first();
+    // Parent is now a <select>; pick the first real option, then revert to the empty option.
+    const parent = page.locator('div.fixed.inset-0 select').nth(1);
     await expect(parent).toBeVisible();
-    await parent.fill('1');
+    const parentValues: string[] = await parent
+      .locator('option')
+      .evaluateAll((opts: any[]) => opts.map(o => o.value));
+    const firstReal = parentValues.find(v => v !== '');
+    if (firstReal) await parent.selectOption(firstReal).catch(() => {});
     await submitModal(page, /^Update$/);
-    // revert parent to empty
+    // revert parent to the empty option
     const r2 = page.locator('tr', { hasText: LOC_NAME }).first();
     if (await r2.count()) {
       await r2.getByRole('button', { name: /^Edit$/ }).click();
-      await page.locator('div.fixed.inset-0').getByPlaceholder('e.g. 1').first().fill('');
+      if (parentValues.includes('')) {
+        await page.locator('div.fixed.inset-0 select').nth(1).selectOption('').catch(() => {});
+      }
       await submitModal(page, /^Update$/);
     }
   });
